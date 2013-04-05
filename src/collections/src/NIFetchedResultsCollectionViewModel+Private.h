@@ -8,9 +8,6 @@
 
 @interface NIFetchedResultsCollectionViewModel()
 
-@property (nonatomic, NI_STRONG) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, NI_WEAK) UICollectionView *collectionView;
-
 @property (nonatomic, NI_STRONG) NSMutableArray *objectChanges;
 @property (nonatomic, NI_STRONG) NSMutableArray *sectionChanges;
 
