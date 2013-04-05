@@ -48,5 +48,6 @@
 
 #import "NICollectionViewCellFactory.h"
 #import "NICollectionViewModel.h"
+#import "NIFetchedResultsCollectionViewModel.h"
 
 /**@}*/
