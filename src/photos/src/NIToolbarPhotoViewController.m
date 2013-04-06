@@ -311,23 +311,6 @@
     return;
   }
 
-  CGRect toolbarFrame = self.toolbar.frame;
-  CGRect bounds = self.view.bounds;
-
-  if (self.toolbarIsTranslucent) {
-    // Reset the toolbar's initial position.
-    if (!isVisible) {
-      toolbarFrame.origin.y = bounds.size.height - toolbarFrame.size.height;
-
-    } else {
-      // Ensure that the toolbar is visible through the animation.
-      self.toolbar.hidden = NO;
-
-      toolbarFrame.origin.y = bounds.size.height;
-    }
-    self.toolbar.frame = toolbarFrame;
-  }
-
   // Show/hide the system chrome.
   if ([[UIApplication sharedApplication] respondsToSelector:
        @selector(setStatusBarHidden:withAnimation:)]) {
@@ -344,6 +327,23 @@
                                                  animated: animated];
 #endif
   }
+    
+    CGRect toolbarFrame = self.toolbar.frame;
+    CGRect bounds = self.view.bounds;
+    
+    if (self.toolbarIsTranslucent) {
+        // Reset the toolbar's initial position.
+        if (!isVisible) {
+            toolbarFrame.origin.y = bounds.size.height - toolbarFrame.size.height;
+            
+        } else {
+            // Ensure that the toolbar is visible through the animation.
+            self.toolbar.hidden = NO;
+            
+            toolbarFrame.origin.y = bounds.size.height;
+        }
+        self.toolbar.frame = toolbarFrame;
+    }
 
   if (self.toolbarIsTranslucent) {
     // Place the toolbar at its final location.
@@ -361,15 +361,17 @@
   CGRect navigationBarFrame = CGRectZero;
   if (nil != self.navigationController.navigationBar) {
     navigationBarFrame = self.navigationController.navigationBar.frame;
-    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-    CGFloat statusBarHeight = MIN(statusBarFrame.size.width, statusBarFrame.size.height);
-
-    if (isVisible) {
-      navigationBarFrame.origin.y = statusBarHeight;
-
-    } else {
-      navigationBarFrame.origin.y = 0;
-    }
+      if (self.navigationController.view.superview == self.navigationController.view.window) {
+          CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+          CGFloat statusBarHeight = MIN(statusBarFrame.size.width, statusBarFrame.size.height);
+          
+          if (isVisible) {
+              navigationBarFrame.origin.y = statusBarHeight;
+              
+          } else {
+              navigationBarFrame.origin.y = 0;
+          }
+      }
   }
 
   if (animated) {
