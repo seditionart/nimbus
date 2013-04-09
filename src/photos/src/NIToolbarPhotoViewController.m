@@ -169,6 +169,14 @@
 
 }
 
+- (NIPhotoAlbumScrollView *)photoAlbumView
+{
+  if (_photoAlbumView == nil) {
+    _photoAlbumView = [[NIPhotoAlbumScrollView alloc] initWithFrame:CGRectZero];
+  }
+  return _photoAlbumView;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)loadView {
@@ -198,7 +206,9 @@
   if (!self.toolbarIsTranslucent) {
     photoAlbumFrame = NIRectContract(bounds, 0, toolbarHeight);
   }
-  _photoAlbumView = [[NIPhotoAlbumScrollView alloc] initWithFrame:photoAlbumFrame];
+  //// access the photo album view to trigger instantiation
+  [self photoAlbumView];
+  _photoAlbumView.frame = photoAlbumFrame;
   _photoAlbumView.autoresizingMask = (UIViewAutoresizingFlexibleWidth
                                       | UIViewAutoresizingFlexibleHeight);
   _photoAlbumView.delegate = self;

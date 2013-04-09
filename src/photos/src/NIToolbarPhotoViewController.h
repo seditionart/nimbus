@@ -72,7 +72,7 @@
 @interface NIToolbarPhotoViewController : UIViewController <
   NIPhotoAlbumScrollViewDelegate,
   NIPhotoScrubberViewDelegate > {
-@private
+@protected
   // Views
   UIToolbar*              _toolbar;
   NIPhotoAlbumScrollView* _photoAlbumView;
