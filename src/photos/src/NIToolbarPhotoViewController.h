@@ -92,6 +92,7 @@
   BOOL _isChromeHidden;
 
   // Configuration
+  BOOL _showToolbar;
   BOOL _toolbarIsTranslucent;
   BOOL _hidesChromeWhenScrolling;
   BOOL _chromeCanBeHidden;
@@ -101,6 +102,7 @@
 
 #pragma mark Configuring Functionality
 
+@property (nonatomic, readwrite, assign) BOOL showToolbar;
 @property (nonatomic, readwrite, assign, getter=isToolbarTranslucent) BOOL toolbarIsTranslucent; // default: yes
 @property (nonatomic, readwrite, assign) BOOL hidesChromeWhenScrolling; // default: yes
 @property (nonatomic, readwrite, assign) BOOL chromeCanBeHidden; // default: yes

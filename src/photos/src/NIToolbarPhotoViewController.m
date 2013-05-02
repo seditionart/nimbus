@@ -29,6 +29,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation NIToolbarPhotoViewController
 
+@synthesize showToolbar = _showToolbar;
 @synthesize toolbarIsTranslucent = _toolbarIsTranslucent;
 @synthesize hidesChromeWhenScrolling = _hidesChromeWhenScrolling;
 @synthesize chromeCanBeHidden = _chromeCanBeHidden;
@@ -56,6 +57,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
   if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
     // Default Configuration Settings
+    self.showToolbar = YES;
     self.toolbarIsTranslucent = YES;
     self.hidesChromeWhenScrolling = YES;
     self.chromeCanBeHidden = YES;
@@ -193,6 +195,7 @@
                                    bounds.size.width, toolbarHeight);
 
   _toolbar = [[UIToolbar alloc] initWithFrame:toolbarFrame];
+  _toolbar.hidden = !self.showToolbar;
   _toolbar.barStyle = UIBarStyleBlack;
   _toolbar.translucent = self.toolbarIsTranslucent;
   _toolbar.autoresizingMask = (UIViewAutoresizingFlexibleWidth
@@ -327,9 +330,8 @@
     // On 3.2 and higher we can slide the status bar out.
     [[UIApplication sharedApplication] setStatusBarHidden: !isVisible
                                             withAnimation: (animated
-                                                            ? UIStatusBarAnimationSlide
+                                                            ? UIStatusBarAnimationFade
                                                             : UIStatusBarAnimationNone)];
-
   } else {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < NIIOS_3_2
     // On 3.0 devices we use the boring fade animation.
@@ -348,7 +350,7 @@
             
         } else {
             // Ensure that the toolbar is visible through the animation.
-            self.toolbar.hidden = NO;
+            self.toolbar.hidden = !self.showToolbar;
             
             toolbarFrame.origin.y = bounds.size.height;
         }
@@ -581,7 +583,7 @@
 
     if ([self isViewLoaded]) {
       // Ensure that the toolbar is visible.
-      self.toolbar.hidden = NO;
+      self.toolbar.hidden = !self.showToolbar;
 
       CGRect toolbarFrame = self.toolbar.frame;
       CGRect bounds = self.view.bounds;
