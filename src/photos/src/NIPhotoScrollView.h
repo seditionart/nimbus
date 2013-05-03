@@ -31,7 +31,7 @@
 @interface NIPhotoScrollView : UIView <
   UIScrollViewDelegate,
   NIPagingScrollViewPage> {
-@private
+@protected
   // The photo view to be zoomed.
   UIImageView* _imageView;
   // The scroll view.

@@ -421,7 +421,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)toggleChromeVisibility {
-  [self setChromeVisibility:(_isChromeHidden || _isAnimatingChrome) animated:YES];
+  [self setChromeVisibility:(_isChromeHidden || _isAnimatingChrome) animated:NO];
 }
 
 

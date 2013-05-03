@@ -118,7 +118,7 @@
     _scrollView.autoresizingMask = (UIViewAutoresizingFlexibleWidth
                                     | UIViewAutoresizingFlexibleHeight);
 
-    _loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    _loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [_loadingView sizeToFit];
     _loadingView.frame = NIFrameOfCenteredViewWithinView(_loadingView, self);
     _loadingView.autoresizingMask = UIViewAutoresizingFlexibleMargins;
