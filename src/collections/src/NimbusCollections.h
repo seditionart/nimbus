@@ -43,11 +43,19 @@
  * @defgroup CollectionViewCellFactory Collection View Cell Factory
  */
 
+#pragma mark * Model Tools
+
+/**
+ * @defgroup CollectionViewTools Collection View Tools
+ */
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "NICollectionViewActions.h"
 #import "NICollectionViewCellFactory.h"
 #import "NICollectionViewModel.h"
 #import "NIFetchedResultsCollectionViewModel.h"
+#import "NIMutableCollectionViewModel.h"
 
 /**@}*/
