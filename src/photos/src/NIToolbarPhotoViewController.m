@@ -30,6 +30,7 @@
 @implementation NIToolbarPhotoViewController
 
 @synthesize showToolbar = _showToolbar;
+@synthesize showStatusBar = _showStatusBar;
 @synthesize toolbarIsTranslucent = _toolbarIsTranslucent;
 @synthesize hidesChromeWhenScrolling = _hidesChromeWhenScrolling;
 @synthesize chromeCanBeHidden = _chromeCanBeHidden;
@@ -58,6 +59,7 @@
   if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
     // Default Configuration Settings
     self.showToolbar = YES;
+    self.showStatusBar = YES;
     self.toolbarIsTranslucent = YES;
     self.hidesChromeWhenScrolling = YES;
     self.chromeCanBeHidden = YES;
@@ -230,10 +232,17 @@
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
 
-  [[UIApplication sharedApplication] setStatusBarStyle: (NIIsPad()
-                                                         ? UIStatusBarStyleBlackOpaque
-                                                         : UIStatusBarStyleBlackTranslucent)
-                                              animated: animated];
+  if (_showStatusBar) {
+    [[UIApplication sharedApplication] setStatusBarStyle: (NIIsPad()
+                                                           ? UIStatusBarStyleBlackOpaque
+                                                           : UIStatusBarStyleBlackTranslucent)
+                                                animated: animated];
+  } else {
+    [[UIApplication sharedApplication] setStatusBarHidden:YES
+                                            withAnimation:(animated
+                                                           ? UIStatusBarAnimationFade
+                                                           : UIStatusBarAnimationNone)];
+  }
 
   UINavigationBar* navBar = self.navigationController.navigationBar;
   navBar.barStyle = UIBarStyleBlack;
@@ -317,48 +326,37 @@
     // Nothing to do here.
     return;
   }
-
+    
   // Show/hide the system chrome.
-  if ([[UIApplication sharedApplication] respondsToSelector:
-       @selector(setStatusBarHidden:withAnimation:)]) {
-    // On 3.2 and higher we can slide the status bar out.
-    [[UIApplication sharedApplication] setStatusBarHidden: !isVisible
-                                            withAnimation: (animated
-                                                            ? UIStatusBarAnimationFade
-                                                            : UIStatusBarAnimationNone)];
-  } else {
+  if (_showStatusBar) {
+    if ([[UIApplication sharedApplication] respondsToSelector:
+         @selector(setStatusBarHidden:withAnimation:)]) {
+        // On 3.2 and higher we can slide the status bar out.
+        [[UIApplication sharedApplication] setStatusBarHidden: !isVisible
+                                                withAnimation: (animated
+                                                                ? UIStatusBarAnimationFade
+                                                                : UIStatusBarAnimationNone)];
+    } else {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < NIIOS_3_2
-    // On 3.0 devices we use the boring fade animation.
-    [[UIApplication sharedApplication] setStatusBarHidden: !isVisible
-                                                 animated: animated];
+      // On 3.0 devices we use the boring fade animation.
+      [[UIApplication sharedApplication] setStatusBarHidden: !isVisible
+                                                   animated: animated];
 #endif
+    }
   }
     
-    CGRect toolbarFrame = self.toolbar.frame;
-    CGRect bounds = self.view.bounds;
+  CGRect toolbarFrame = self.toolbar.frame;
+  CGRect bounds = self.view.bounds;
     
-    if (self.toolbarIsTranslucent) {
-        // Reset the toolbar's initial position.
-        if (!isVisible) {
-            toolbarFrame.origin.y = bounds.size.height - toolbarFrame.size.height;
-            
-        } else {
-            // Ensure that the toolbar is visible through the animation.
-            self.toolbar.hidden = !self.showToolbar;
-            
-            toolbarFrame.origin.y = bounds.size.height;
-        }
-        self.toolbar.frame = toolbarFrame;
-    }
-
   if (self.toolbarIsTranslucent) {
-    // Place the toolbar at its final location.
-    if (isVisible) {
-      // Slide up.
+    // Reset the toolbar's initial position.
+    if (!isVisible) {
       toolbarFrame.origin.y = bounds.size.height - toolbarFrame.size.height;
-
+            
     } else {
-      // Slide down.
+      // Ensure that the toolbar is visible through the animation.
+      self.toolbar.hidden = !self.showToolbar;
+            
       toolbarFrame.origin.y = bounds.size.height;
     }
   }
@@ -367,17 +365,19 @@
   CGRect navigationBarFrame = CGRectZero;
   if (nil != self.navigationController.navigationBar) {
     navigationBarFrame = self.navigationController.navigationBar.frame;
-      if (self.navigationController.view.superview == self.navigationController.view.window) {
-          CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-          CGFloat statusBarHeight = MIN(statusBarFrame.size.width, statusBarFrame.size.height);
+    if (!_showStatusBar) {
+      navigationBarFrame.origin.y = 0;
+    } else if (self.navigationController.view.superview == self.navigationController.view.window) {
+      CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+      CGFloat statusBarHeight = MIN(statusBarFrame.size.width, statusBarFrame.size.height);
           
-          if (isVisible) {
-              navigationBarFrame.origin.y = statusBarHeight;
+      if (isVisible) {
+        navigationBarFrame.origin.y = statusBarHeight;
               
-          } else {
-              navigationBarFrame.origin.y = 0;
-          }
+      } else {
+        navigationBarFrame.origin.y = 0;
       }
+    }
   }
 
   if (animated) {
