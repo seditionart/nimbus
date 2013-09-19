@@ -16,6 +16,7 @@
 
 #import "NIPagingScrollViewPage.h"
 #import "NIPhotoScrollViewPhotoSize.h"
+#import "SAActivityIndicatorView.h"
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -36,7 +37,7 @@
   UIImageView* _imageView;
   // The scroll view.
   NICenteringScrollView* _scrollView;
-  UIActivityIndicatorView* _loadingView;
+  SAActivityIndicatorView* _loadingView;
 
   // Photo Information
   NIPhotoScrollViewPhotoSize _photoSize;
